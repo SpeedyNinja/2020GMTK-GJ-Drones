@@ -11,7 +11,7 @@ public class ProjectileController : MonoBehaviour
     AudioClip microphoneInput;
     private AudioSource source;
     private Transform controller;
-    private Rigidbody projectile;
+    private GameObject projectile;
     private bool canShoot;
     private float cooldown;
     
@@ -92,17 +92,13 @@ public class ProjectileController : MonoBehaviour
             }
             else
             {
-                var instance = Instantiate(projectilePrefab, controller.position, Quaternion.identity);
-                instance.transform.parent = gameObject.transform;
-                projectile = instance.GetComponent<Rigidbody>();
                 canShoot = true;
                 cooldown = shotCooldown;
             }
         }
         else if (canShoot == true && Input.GetAxis("Vertical") != 0)
         {
-            projectile.AddForce(Vector3.forward * 10, ForceMode.Impulse);
-            projectile.useGravity = true;
+            projectile = Instantiate(projectilePrefab, controller.position, Quaternion.LookRotation(Vector3.forward));
             canShoot = false;
         }
     }
