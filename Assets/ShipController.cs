@@ -96,7 +96,7 @@ public class ShipController : MonoBehaviour
             shotCooldown = Math.Min(1 / lvlMax * shotCooldownMultiplier, 4);
             slider.maxValue = shotCooldown;
             var rect = _rectTransformCooldownSlider.rect;
-            _rectTransformCooldownSlider.sizeDelta = new Vector2(shotCooldown * 100, _rectTransformCooldownSlider.sizeDelta.y);
+            _rectTransformCooldownSlider.sizeDelta = new Vector2(shotCooldown * 125, _rectTransformCooldownSlider.sizeDelta.y);
             Debug.Log(maxIdx + " " + lvlMax);
         }
         
