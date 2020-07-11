@@ -25,13 +25,14 @@ public class ProjectileController : MonoBehaviour
         projectile = null;
         canShoot = false;
         cooldown = 0;
-        
+        Debug.Log(Microphone.devices.Length);
         if (Microphone.devices.Length>0){
             microphoneInput = Microphone.Start(Microphone.devices[0],true,2,44100);
             source = GetComponent<AudioSource>();
             source.clip = microphoneInput;
-            source.loop = true;
+            while (!(Microphone.GetPosition(null) > 0)) { }
             source.Play();
+            Debug.Log("YES");
         }
     }
 
@@ -40,7 +41,7 @@ public class ProjectileController : MonoBehaviour
     {
         int dec = 128;
         float[] waveData = new float[dec];
-        
+
         source.GetSpectrumData(samples, 0, FFTWindow.Hamming);
         int micPosition = Microphone.GetPosition(null)-(dec+1); // null means the first microphone
         microphoneInput.GetData(waveData, micPosition);
