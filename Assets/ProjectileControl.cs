@@ -2,32 +2,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
-public class DroneControl : MonoBehaviour
+public class ProjectileControl : MonoBehaviour
 {
     private Rigidbody rb;
-    private BoxCollider bc;
-
+    
     // Start is called before the first frame update
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();
-        bc = gameObject.GetComponent<BoxCollider>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
 
-    private void FixedUpdate()
+    public void Fire(Vector3 direction)
     {
-        rb.AddForce(rb.transform.right * 2);
+        rb.AddForce(direction, ForceMode.Impulse);
+        rb.useGravity = true;
     }
 
     public void ExitBoundary()
     {
-        rb.transform.SetPositionAndRotation(rb.transform.parent.position, Quaternion.identity);
+        Object.Destroy(gameObject);
     }
 }
