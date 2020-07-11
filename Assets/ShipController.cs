@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class ProjectileController : MonoBehaviour
+public class ShipController : MonoBehaviour
 {
     public GameObject projectilePrefab;
     public float shotCooldown;
@@ -17,13 +17,14 @@ public class ProjectileController : MonoBehaviour
     private Transform controller;
     private GameObject projectile;
     private bool canShoot;
-    private float cooldown;
+    public float cooldown;
     
     float[] samples = new float[512];
     List<float> movingAverageSamples = CreateList<float>(128);
 
     public float decayRate = 0.5f;
-    
+    [SerializeField] private float movespeed;
+
     private static List<T> CreateList<T>(int capacity)
     {
         List<T> coll = new List<T>(capacity);
@@ -86,27 +87,35 @@ public class ProjectileController : MonoBehaviour
             shotCooldown = 1 / lvlMax * shotCooldownMultiplier;
             Debug.Log(maxIdx + " " + lvlMax);
         }
+
+        var diff = (transform.position.x + 5) / 10 - Mathf.Clamp(normalizedPositions,0, 1);
+        Debug.Log(diff);
+        if (Math.Abs(diff) > float.Epsilon)
+        {
+            transform.position += Vector3.left * (Math.Sign(diff) * Math.Min(movespeed * Time.deltaTime, Math.Abs(diff)));
+        }
     }
 
     private void FixedUpdate()
     {
         
-        if (canShoot == false)
+        if (!canShoot)
         {
-            if (cooldown > 0)
+            if (cooldown < shotCooldown)
             {
-                cooldown -= Time.deltaTime;
+                cooldown += Time.fixedDeltaTime;
             }
             else
             {
                 canShoot = true;
-                cooldown = shotCooldown;
             }
         }
-        else if (canShoot == true && Input.GetAxis("Vertical") != 0)
+        else
         {
             projectile = Instantiate(projectilePrefab, controller.position, Quaternion.LookRotation(Vector3.forward));
             canShoot = false;
+            cooldown = 0;
+            Debug.Log("WE ARE FREE");
         }
     }
 }
