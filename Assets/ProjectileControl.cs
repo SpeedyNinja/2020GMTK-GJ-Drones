@@ -12,17 +12,7 @@ public class ProjectileControl : MonoBehaviour
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
-    public void Fire(Vector3 direction)
-    {
-        rb.AddForce(direction, ForceMode.Impulse);
-        rb.useGravity = true;
+        rb.AddForce(Vector3.up * 10, ForceMode.Impulse);
     }
 
     public void ExitBoundary()
