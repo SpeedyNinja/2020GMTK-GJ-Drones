@@ -2,11 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using EZCameraShake;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ShipController : MonoBehaviour
 {
+    public CameraShaker shaker;
     public GameObject projectilePrefab;
     public float shotCooldown;
 
@@ -125,7 +127,8 @@ public class ShipController : MonoBehaviour
             }
             else
             {
-            
+
+                shaker.ShakeOnce(0.5f, 10f, 0.1f, 0.1f);
                 projectile = Instantiate(projectilePrefab, controller.position, Quaternion.LookRotation(Vector3.forward));
                 canShoot = false;
                 cooldown = 0;

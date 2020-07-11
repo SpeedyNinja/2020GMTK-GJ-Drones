@@ -20,7 +20,7 @@ public class DroneController : MonoBehaviour
         if (cameraMain != null)
         {
             orthographicSize = cameraMain.orthographicSize;
-            _halfScreen = cameraMain.aspect * orthographicSize * 0.9f;
+            _halfScreen = cameraMain.aspect * orthographicSize * 0.8f;
         }
         gameObject.transform.position = new Vector3(0, orthographicSize);
         _droneSpawnRate = 2;

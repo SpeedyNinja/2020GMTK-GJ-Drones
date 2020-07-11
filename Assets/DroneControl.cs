@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor.UI;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 public class DroneControl : MonoBehaviour
 {
@@ -13,12 +14,17 @@ public class DroneControl : MonoBehaviour
     private float deathDelay;
     private float deathCountdown;
     private float health;
+    private SpriteRenderer _spriteRenderer;
+    private static readonly int GlowVal = Shader.PropertyToID("_GlowVal");
 
     // Start is called before the first frame update
     void Start()
     {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         rb = gameObject.GetComponent<Rigidbody2D>();
         rb.AddForce(Vector2.down * 2, ForceMode2D.Impulse);
+        var val = Random.value + 1;
+        _spriteRenderer.material.SetFloat(GlowVal, val);
         health = 1;
     }
 
