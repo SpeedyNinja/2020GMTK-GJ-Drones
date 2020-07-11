@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.UI;
 using UnityEngine;
 
 public class DroneControl : MonoBehaviour
@@ -11,6 +12,7 @@ public class DroneControl : MonoBehaviour
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
+        rb.AddForce(rb.transform.right * 20, ForceMode2D.Impulse);
     }
 
     // Update is called once per frame
@@ -21,7 +23,7 @@ public class DroneControl : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.AddForce(rb.transform.right * 2);
+        
     }
 
     public void ExitBoundary()
@@ -31,7 +33,9 @@ public class DroneControl : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        Debug.Log("Boom");
         rb.transform.SetPositionAndRotation(rb.transform.parent.position, Quaternion.identity);
+        rb.velocity = Vector2.zero;
+        rb.angularVelocity = 0;
+        rb.AddForce(rb.transform.right * 20, ForceMode2D.Impulse);
     }
 }

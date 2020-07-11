@@ -167,7 +167,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 7489681007407106134, guid: 2807c62ae1c18e2f7a822a79583c7ffe,
     type: 3}
-  shotCooldown: 5
+  shotCooldown: 0.1
   decayRate: 0.5
 --- !u!82 &683328398
 AudioSource:

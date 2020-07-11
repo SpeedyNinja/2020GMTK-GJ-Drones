@@ -15,7 +15,7 @@ public class ProjectileControl : MonoBehaviour
         rb.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
     }
 
-    public void ExitBoundary()
+    public void OnTriggerExit2D(Collider2D other)
     {
         Object.Destroy(gameObject);
     }
