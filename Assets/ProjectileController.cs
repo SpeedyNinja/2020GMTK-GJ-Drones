@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ProjectileController : MonoBehaviour
@@ -16,7 +17,18 @@ public class ProjectileController : MonoBehaviour
     private float cooldown;
     
     float[] samples = new float[512];
+    List<float> movingAverageSamples = CreateList<float>(128);
 
+    public float decayRate = 0.5f;
+    
+    private static List<T> CreateList<T>(int capacity)
+    {
+        List<T> coll = new List<T>(capacity);
+        for(int i = 0; i < capacity; i++)
+            coll.Add(default(T));
+
+        return coll;
+    }
     
     // Start is called before the first frame update
     void Start()
@@ -30,9 +42,9 @@ public class ProjectileController : MonoBehaviour
             microphoneInput = Microphone.Start(Microphone.devices[0],true,2,44100);
             source = GetComponent<AudioSource>();
             source.clip = microphoneInput;
+            source.loop = true;
             while (!(Microphone.GetPosition(null) > 0)) { }
             source.Play();
-            Debug.Log("YES");
         }
     }
 
@@ -41,44 +53,33 @@ public class ProjectileController : MonoBehaviour
     {
         int dec = 128;
         float[] waveData = new float[dec];
-
+    
         source.GetSpectrumData(samples, 0, FFTWindow.Hamming);
-        int micPosition = Microphone.GetPosition(null)-(dec+1); // null means the first microphone
-        microphoneInput.GetData(waveData, micPosition);
 
-        for (int i = 1; i < samples.Length - 1; i++)
+        for (int i = 0; i < movingAverageSamples.Count; i++)
         {
-            Debug.DrawLine(new Vector3(i - 1, samples[i] + 10, 0), new Vector3(i, samples[i + 1] + 10, 0), Color.red);
-            Debug.DrawLine(new Vector3(i - 1, Mathf.Log(samples[i - 1]) + 10, 2), new Vector3(i, Mathf.Log(samples[i]) + 10, 2), Color.cyan);
-            Debug.DrawLine(new Vector3(Mathf.Log(i - 1), samples[i - 1] - 10, 1), new Vector3(Mathf.Log(i), samples[i] - 10, 1), Color.green);
-            Debug.DrawLine(new Vector3(Mathf.Log(i - 1), Mathf.Log(samples[i - 1]), 3), new Vector3(Mathf.Log(i), Mathf.Log(samples[i]), 3), Color.blue);
+            movingAverageSamples[i] = decayRate * samples[i] + (1 - decayRate) * movingAverageSamples[i];
+        }
+
+        // var output = ZScore.StartAlgo(movingAverageSamples, 5, 10, 0);
+
+        for (int i = 1; i < movingAverageSamples.Count - 1; i++)
+        {
+            Debug.DrawLine(new Vector3(i - 1, Mathf.Log(movingAverageSamples[i - 1]) + 10, 2), new Vector3(i, Mathf.Log(movingAverageSamples[i]) + 10, 2), Color.cyan);
         }
         
         float max = 0;
-        int maxIdx = 0;
-        for (var i = 0; i < samples.Length; i++)
+        // int maxIdx = 0;
+        var maxIdx = movingAverageSamples.Select((v, i) => new {v, i})
+            .OrderByDescending(c => c.v)
+            .Take(3)
+            .Min(c => c.i);
+
+        var lvlMax = movingAverageSamples.Average() * 1000;
+        
+        if (lvlMax > 0.05)
         {
-            var sample = samples[i];
-            if (sample > max)
-            {
-                max = sample;
-                maxIdx = i;
-            }
-        }
-
-
-        // Getting a peak on the last 128 samples
-        float levelMax = 0;
-        for (int i = 0; i < dec; i++) {
-            float wavePeak = Math.Abs(waveData[i]);
-            if (levelMax < wavePeak) {
-                levelMax = wavePeak;
-            }
-        }
-
-        if (levelMax > 0.05)
-        {
-            Debug.Log(maxIdx);
+            Debug.Log(maxIdx + " " + lvlMax);
         }
     }
 

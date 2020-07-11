@@ -168,6 +168,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 7489681007407106134, guid: 2807c62ae1c18e2f7a822a79583c7ffe,
     type: 3}
   shotCooldown: 5
+  decayRate: 0.5
 --- !u!82 &683328398
 AudioSource:
   m_ObjectHideFlags: 0
@@ -289,7 +290,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 0
+  m_Enabled: 1
 --- !u!20 &963194227
 Camera:
   m_ObjectHideFlags: 0
@@ -317,7 +318,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5.338711
+  orthographic size: 20
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
