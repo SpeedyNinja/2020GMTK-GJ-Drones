@@ -9,6 +9,9 @@ public class ProjectileController : MonoBehaviour
     public GameObject projectilePrefab;
     public float shotCooldown;
 
+    public float normalizedPositions;
+    public float shotCooldownMultiplier;
+
     AudioClip microphoneInput;
     private AudioSource source;
     private Transform controller;
@@ -77,8 +80,10 @@ public class ProjectileController : MonoBehaviour
 
         var lvlMax = movingAverageSamples.Average() * 1000;
         
-        if (lvlMax > 0.05)
+        if (lvlMax > 0.075)
         {
+            normalizedPositions = (maxIdx - 2) * 0.1f;
+            shotCooldown = 1 / lvlMax * shotCooldownMultiplier;
             Debug.Log(maxIdx + " " + lvlMax);
         }
     }
