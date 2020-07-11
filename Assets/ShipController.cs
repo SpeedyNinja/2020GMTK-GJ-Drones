@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShipController : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class ShipController : MonoBehaviour
     public float normalizedPositions;
     public float shotCooldownMultiplier;
 
+    public Slider slider;
+    
     AudioClip microphoneInput;
     private AudioSource source;
     private Transform controller;
@@ -19,11 +22,17 @@ public class ShipController : MonoBehaviour
     private bool canShoot;
     public float cooldown;
     
-    float[] samples = new float[512];
+    float[] samples = new float[1024];
     List<float> movingAverageSamples = CreateList<float>(128);
 
     public float decayRate = 0.5f;
     [SerializeField] private float movespeed;
+    private RectTransform _rectTransformCooldownSlider;
+
+    private void Awake()
+    {
+        _rectTransformCooldownSlider = slider.GetComponentInParent<RectTransform>();
+    }
 
     private static List<T> CreateList<T>(int capacity)
     {
@@ -83,13 +92,15 @@ public class ShipController : MonoBehaviour
         
         if (lvlMax > 0.075)
         {
-            normalizedPositions = (maxIdx - 2) * 0.1f;
-            shotCooldown = 1 / lvlMax * shotCooldownMultiplier;
+            normalizedPositions = (maxIdx - 4) * 0.05f;
+            shotCooldown = Math.Min(1 / lvlMax * shotCooldownMultiplier, 4);
+            slider.maxValue = shotCooldown;
+            var rect = _rectTransformCooldownSlider.rect;
+            _rectTransformCooldownSlider.sizeDelta = new Vector2(shotCooldown * 150, 50);
             Debug.Log(maxIdx + " " + lvlMax);
         }
 
         var diff = (transform.position.x + 5) / 10 - Mathf.Clamp(normalizedPositions,0, 1);
-        Debug.Log(diff);
         if (Math.Abs(diff) > float.Epsilon)
         {
             transform.position += Vector3.left * (Math.Sign(diff) * Math.Min(movespeed * Time.deltaTime, Math.Abs(diff)));
@@ -98,24 +109,27 @@ public class ShipController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
-        if (!canShoot)
+        if (shotCooldown != 4)
         {
-            if (cooldown < shotCooldown)
+            if (!canShoot)
             {
-                cooldown += Time.fixedDeltaTime;
+                if (cooldown < shotCooldown)
+                {
+                    cooldown += Time.fixedDeltaTime;
+                }
+                else
+                {
+                    canShoot = true;
+                }
+                slider.value = cooldown;
             }
             else
             {
-                canShoot = true;
+            
+                projectile = Instantiate(projectilePrefab, controller.position, Quaternion.LookRotation(Vector3.forward));
+                canShoot = false;
+                cooldown = 0;
             }
-        }
-        else
-        {
-            projectile = Instantiate(projectilePrefab, controller.position, Quaternion.LookRotation(Vector3.forward));
-            canShoot = false;
-            cooldown = 0;
-            Debug.Log("WE ARE FREE");
         }
     }
 }

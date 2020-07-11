@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <uie:ProgressBar title="my-progress" low-value="0" style="opacity: 1; height: 21px; width: 343px;">
+        <Style src="mainScene.uss" />
+    </uie:ProgressBar>
+</ui:UXML>
