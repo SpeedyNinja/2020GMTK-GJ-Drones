@@ -96,11 +96,11 @@ public class ShipController : MonoBehaviour
             shotCooldown = Math.Min(1 / lvlMax * shotCooldownMultiplier, 4);
             slider.maxValue = shotCooldown;
             var rect = _rectTransformCooldownSlider.rect;
-            _rectTransformCooldownSlider.sizeDelta = new Vector2(shotCooldown * 150, 50);
+            _rectTransformCooldownSlider.sizeDelta = new Vector2(shotCooldown * 100, _rectTransformCooldownSlider.sizeDelta.y);
             Debug.Log(maxIdx + " " + lvlMax);
         }
-
-        var diff = (transform.position.x + 5) / 10 - Mathf.Clamp(normalizedPositions,0, 1);
+        
+        var diff = (transform.position.x + 8) / 16 - Mathf.Clamp(normalizedPositions,0, 1);
         if (Math.Abs(diff) > float.Epsilon)
         {
             transform.position += Vector3.left * (Math.Sign(diff) * Math.Min(movespeed * Time.deltaTime, Math.Abs(diff)));
