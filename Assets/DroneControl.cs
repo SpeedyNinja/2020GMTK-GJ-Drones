@@ -5,14 +5,12 @@ using UnityEngine;
 
 public class DroneControl : MonoBehaviour
 {
-    private Rigidbody rb;
-    private BoxCollider bc;
+    private Rigidbody2D rb;
 
     // Start is called before the first frame update
     void Start()
     {
-        rb = gameObject.GetComponent<Rigidbody>();
-        bc = gameObject.GetComponent<BoxCollider>();
+        rb = gameObject.GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -28,6 +26,12 @@ public class DroneControl : MonoBehaviour
 
     public void ExitBoundary()
     {
+        rb.transform.SetPositionAndRotation(rb.transform.parent.position, Quaternion.identity);
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        Debug.Log("Boom");
         rb.transform.SetPositionAndRotation(rb.transform.parent.position, Quaternion.identity);
     }
 }
