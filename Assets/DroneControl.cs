@@ -3,22 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.UI;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class DroneControl : MonoBehaviour
 {
     private Rigidbody2D rb;
 
+    private bool dying;
+    private float deathDelay;
+    private float deathCountdown;
+
     // Start is called before the first frame update
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
-        rb.AddForce(rb.transform.right * 20, ForceMode2D.Impulse);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        rb.AddForce(Vector2.down * 2, ForceMode2D.Impulse);
     }
 
     private void FixedUpdate()
@@ -26,16 +25,13 @@ public class DroneControl : MonoBehaviour
         
     }
 
-    public void ExitBoundary()
+    private void OnCollisionEnter2D(Collision2D other)
     {
-        rb.transform.SetPositionAndRotation(rb.transform.parent.position, Quaternion.identity);
+        Debug.Log("hit a thing");
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        rb.transform.SetPositionAndRotation(rb.transform.parent.position, Quaternion.identity);
-        rb.velocity = Vector2.zero;
-        rb.angularVelocity = 0;
-        rb.AddForce(rb.transform.right * 20, ForceMode2D.Impulse);
+        Object.Destroy(gameObject);
     }
 }

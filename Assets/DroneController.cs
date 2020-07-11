@@ -5,16 +5,27 @@ using UnityEngine;
 public class DroneController : MonoBehaviour
 {
     public GameObject drone;
-    public int maxDrones;
     
-    private Transform controller;
-    private List<GameObject> drones;
+    private Transform _controller;
+    private float _droneSpawnRate;
+    private float _droneSpawnCountDown;
+    private float _halfScreen;
     
     // Start is called before the first frame update
     void Start()
     {
-        controller = gameObject.GetComponent<Transform>();
-        drones = new List<GameObject>();
+        var cameraMain = Camera.main;
+        var orthographicSize = 0f;
+        _halfScreen = 0;
+        if (cameraMain != null)
+        {
+            orthographicSize = cameraMain.orthographicSize;
+            _halfScreen = cameraMain.aspect * orthographicSize;
+        }
+        gameObject.transform.position = new Vector3(0, orthographicSize);
+        _droneSpawnRate = 2;
+        _droneSpawnCountDown = _droneSpawnRate;
+        _controller = gameObject.GetComponent<Transform>();
     }
 
     // Update is called once per frame
@@ -25,11 +36,14 @@ public class DroneController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (drones.Count < maxDrones)
+        if (_droneSpawnCountDown > 0)
         {
-            var newDrone = Instantiate(drone, controller.position, Quaternion.identity);
-            newDrone.transform.parent = controller;
-            drones.Add(newDrone);
+            _droneSpawnCountDown -= Time.deltaTime;
+        }
+        else
+        {
+            Instantiate(drone, new Vector3(Random.Range(-_halfScreen, _halfScreen), _controller.position.y), Quaternion.identity);
+            _droneSpawnCountDown = _droneSpawnRate;
         }
     }
 }
