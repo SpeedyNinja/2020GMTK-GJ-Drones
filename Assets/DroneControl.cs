@@ -31,18 +31,17 @@ public class DroneControl : MonoBehaviour
         _transform = gameObject.GetComponent<Transform>();
         _spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         _transform.localScale = new Vector3(5 * _scale, 5 * _scale, 1);
-        _spriteRenderer.color = new Color((_health - 1) / 5f, 1 - ((_health - 1) / 5f), 1);
+        _spriteRenderer.color = _colour;
         _startPos = _transform.position;
-        var val = Random.value + 1;
-        _spriteRenderer.material.SetFloat(GlowVal, val);
         _max_health = _health;
     }
 
-    public void SetVars(float newHealth, float scale, float newSpeed, float zagOffset, float zagAmount)
+    public void SetVars(float newHealth, float scale, Color newColour, float newSpeed, float zagOffset, float zagAmount)
     {
         _health = newHealth;
         _speed = newSpeed;
         _scale = scale;
+        _colour = newColour;
         _zigOffset = zagOffset;
         _zigAmount = zagAmount;
     }
@@ -55,7 +54,7 @@ public class DroneControl : MonoBehaviour
         var pos = new Vector3(newX, newY);
         var angle = Quaternion.Euler(0, 0, Convert.ToSingle(-180 - (_zigAmount * Math.Cos(newY + _zigOffset) * 45)));
         _transform.SetPositionAndRotation(pos, angle);
-        _spriteRenderer.color = new Color(1 - _health / _max_health, _health / _max_health, 0);
+        _spriteRenderer.material.SetFloat(GlowVal, _health / _max_health + 1);
     }
 
     private void FixedUpdate()

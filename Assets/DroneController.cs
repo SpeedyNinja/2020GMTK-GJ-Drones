@@ -47,6 +47,7 @@ public class DroneController : MonoBehaviour
             var newXPos = Random.Range(-_halfScreen, _halfScreen);
             var newYPos = _controller.position.y;
             var newHealth = Random.value * 2 + 1;
+            var newColour = Color.HSVToRGB(Random.value, 1, 1, true);
             var newScale = Convert.ToSingle((newHealth - 1) / 2 / 2 + 1);
             var newSpeed = newScale;
             var newZigOffset = Convert.ToSingle(Random.value * Math.PI * 2);
@@ -54,7 +55,7 @@ public class DroneController : MonoBehaviour
             
             var droneInstance = Instantiate(drone, new Vector3(newXPos, newYPos), Quaternion.identity);
             var droneScript = droneInstance.GetComponent<DroneControl>();
-            droneScript.SetVars(newHealth, newScale, newSpeed, newZigOffset, newZigAmount);
+            droneScript.SetVars(newHealth, newScale, newColour, newSpeed, newZigOffset, newZigAmount);
             _droneSpawnCountDown = _droneSpawnRate;
         };
     }
