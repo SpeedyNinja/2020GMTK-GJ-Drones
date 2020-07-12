@@ -60,7 +60,7 @@ public class DroneController : MonoBehaviour
             var droneInstance = Instantiate(drone, new Vector3(newXPos, newYPos, _controller.position.z), Quaternion.identity);
             var droneScript = droneInstance.GetComponent<DroneControl>();
             droneScript.SetVars(newHealth, newCanFire, newScale, newColour, newSpeed, newZigOffset, newZigAmount);
-            _droneSpawnCountDown = 10f / (difficulty + 1);
+            _droneSpawnCountDown = - 1 / 2f * difficulty + 5;
         };
     }
 }
