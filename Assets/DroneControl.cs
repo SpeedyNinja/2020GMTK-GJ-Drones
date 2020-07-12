@@ -12,6 +12,7 @@ public class DroneControl : MonoBehaviour
     public float deathDelay;
     public GameObject projectile;
     public GameObject deathParticles;
+    public GameObject winParticles;
     public float reloadDelay;
     
     private Transform _transform;
@@ -107,6 +108,8 @@ public class DroneControl : MonoBehaviour
         {
             Lives.MainLives.LooseLife();
             Object.Destroy(gameObject);
+            CameraShaker.Instance.ShakeOnce(3f, 10f, 0.25f, 0.25f);
+            Instantiate(winParticles, transform.position, Quaternion.identity);
         }
         if (!_dying && _health <= 0)
         {
