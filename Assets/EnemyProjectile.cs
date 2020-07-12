@@ -32,6 +32,7 @@ public class EnemyProjectile : MonoBehaviour
         {
             Lives.MainLives.LooseLife();
             Destroy(gameObject);
+            Instantiate(collisionSparks, transform.position, Quaternion.LookRotation(other.transform.position - transform.position));
         }
     }
 }

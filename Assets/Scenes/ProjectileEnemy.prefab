@@ -112,7 +112,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc91d68899bf758f3a1ade5bfb09e648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionSparks: {fileID: 0}
+  collisionSparks: {fileID: 1747028726869127089, guid: 9b9e58d375b4e18f9a7cbd5ea02c4b7b,
+    type: 3}
   bulletSpeed: 3
 --- !u!50 &-5740001104484377926
 Rigidbody2D:
