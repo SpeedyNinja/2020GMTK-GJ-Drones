@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using EZCameraShake;
 using UnityEngine;
 
 public class EnemyProjectile : MonoBehaviour
@@ -32,7 +33,8 @@ public class EnemyProjectile : MonoBehaviour
         {
             Lives.MainLives.LooseLife();
             Destroy(gameObject);
-            Instantiate(collisionSparks, transform.position, Quaternion.LookRotation(other.transform.position - transform.position));
+            Instantiate(collisionSparks, transform.position, Quaternion.LookRotation(other.transform.position - transform.position));;
+            CameraShaker.Instance.ShakeOnce(10f, 10f, 0.25f, 0.25f);
         }
     }
 }
