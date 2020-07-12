@@ -21,11 +21,12 @@ public class DroneControl : MonoBehaviour
     private bool _dying;
     private float _deathCountdown;
     private float _health;
-    private float _max_health;
+    private float _maxHealth;
     private float _speed;
     private float _zigOffset;
     private float _zigAmount;
-    private float _dead_direction;
+    private float _lowerLimit;
+    private float _z;
     private Vector3 _startPos;
     private static readonly int GlowVal = Shader.PropertyToID("_GlowVal");
 
@@ -37,8 +38,9 @@ public class DroneControl : MonoBehaviour
         _transform.localScale = new Vector3(5 * _scale, 5 * _scale, 1);
         _spriteRenderer.color = _colour;
         _startPos = _transform.position;
-        _max_health = _health;
+        _maxHealth = _health;
         _deathCountdown = deathDelay;
+        _lowerLimit = - Camera.main.orthographicSize - 1;
     }
 
     public void SetVars(float newHealth, float scale, Color newColour, float newSpeed, float zagOffset, float zagAmount)
@@ -58,10 +60,10 @@ public class DroneControl : MonoBehaviour
             var newY = _transform.position.y - _speed * Time.deltaTime;
             var xDelta = Convert.ToSingle(_zigAmount * Math.Sin(newY + _zigOffset));
             var newX = xDelta + _startPos.x;
-            var pos = new Vector3(newX, newY);
+            var pos = new Vector3(newX, newY, _startPos.z);
             var angle = Quaternion.Euler(0, 0, Convert.ToSingle(-180 - (_zigAmount * Math.Cos(newY + _zigOffset) * 45)));
             _transform.SetPositionAndRotation(pos, angle);
-            _spriteRenderer.material.SetFloat(GlowVal, _health / _max_health + 1);
+            _spriteRenderer.material.SetFloat(GlowVal, _health / _maxHealth + 1);
         }
         else
         {
@@ -70,7 +72,7 @@ public class DroneControl : MonoBehaviour
                 _deathCountdown -= Time.deltaTime;
                 _spriteRenderer.color = new Color(_colour.r, _colour.g, _colour.b, _deathCountdown / deathDelay);
                 var newY = _transform.position.y - _speed * _deathCountdown / deathDelay * Time.deltaTime;
-                var pos = new Vector3(_transform.position.x, newY);
+                var pos = new Vector3(_transform.position.x, newY, _startPos.z);
                 var angle = Quaternion.Euler(0, 0, _transform.rotation.eulerAngles.z + (Time.deltaTime * 360 * _deathCountdown / deathDelay));
                 _transform.SetPositionAndRotation(pos, angle);
             }
@@ -83,6 +85,11 @@ public class DroneControl : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_transform.position.y < _lowerLimit)
+        {
+            Lives.MainLives.LooseLife();
+            Object.Destroy(gameObject);
+        }
         if (!_dying && _health <= 0)
         {
             Instantiate(deathParticles, transform.position, Quaternion.identity, transform);
@@ -96,11 +103,5 @@ public class DroneControl : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (_health > 0) _health -= 1;
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        Lives.MainLives.LooseLife();
-        Object.Destroy(gameObject);
     }
 }

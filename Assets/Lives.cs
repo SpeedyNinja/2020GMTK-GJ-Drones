@@ -10,6 +10,7 @@ public class Lives : MonoBehaviour
     public static Lives MainLives;
     public float textSizeMultiplier;
     public float textPopTime;
+    public int startLives;
     
     private TextMeshProUGUI textMesh;
     private float _baseTextSize;
@@ -24,9 +25,10 @@ public class Lives : MonoBehaviour
         MainLives = this;
         textMesh = gameObject.GetComponent<TextMeshProUGUI>();
         _baseTextSize = textMesh.fontSize;
-        _score = 0;
+        _score = startLives;
         _addToScore = 0;
         _textPopCountup = 1000;
+        textMesh.SetText("" + _score);
     }
 
     // Update is called once per frame

@@ -25,7 +25,7 @@ public class DroneController : MonoBehaviour
             orthographicSize = cameraMain.orthographicSize;
             _halfScreen = cameraMain.aspect * orthographicSize * 0.7f;
         }
-        gameObject.transform.position = new Vector3(0, orthographicSize);
+        gameObject.transform.position = new Vector3(0, orthographicSize, gameObject.transform.position.z);
         _droneSpawnRate = 10f / difficulty;
         _droneSpawnCountDown = 0;
         _controller = gameObject.GetComponent<Transform>();
@@ -54,7 +54,7 @@ public class DroneController : MonoBehaviour
             var newZigOffset = Convert.ToSingle(Random.value * Math.PI * 2);
             var newZigAmount = Convert.ToSingle(Random.value * 0.6);
             
-            var droneInstance = Instantiate(drone, new Vector3(newXPos, newYPos), Quaternion.identity);
+            var droneInstance = Instantiate(drone, new Vector3(newXPos, newYPos, _controller.position.z), Quaternion.identity);
             var droneScript = droneInstance.GetComponent<DroneControl>();
             droneScript.SetVars(newHealth, newScale, newColour, newSpeed, newZigOffset, newZigAmount);
             _droneSpawnCountDown = _droneSpawnRate;

@@ -518,6 +518,10 @@ MonoBehaviour:
   pitchTm: {fileID: 0}
   pitchTmLow: {fileID: 0}
   pitchTmHigh: {fileID: 0}
+  loudBtn: {fileID: 0}
+  lowBtn: {fileID: 0}
+  highBtn: {fileID: 0}
+  continueBtn: {fileID: 0}
 --- !u!1 &824038672
 GameObject:
   m_ObjectHideFlags: 0
@@ -6143,6 +6147,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textSizeMultiplier: 0
   textPopTime: 0
+  startLives: 10
 --- !u!114 &1194682375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6559,7 +6564,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2073474246}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 99}
   m_LocalScale: {x: 25, y: 14, z: 10}
   m_Children: []
   m_Father: {fileID: 0}
@@ -6590,7 +6595,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2109189768}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10, y: 0, z: 100.3}
+  m_LocalPosition: {x: -10, y: 0, z: 100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -6609,4 +6614,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drone: {fileID: 5695118672530339677, guid: ae337316ee70f1b68b40809e74c55bb1, type: 3}
-  difficulty: 1000
+  difficulty: 3
