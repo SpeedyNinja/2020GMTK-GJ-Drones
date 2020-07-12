@@ -7,6 +7,7 @@ public class EnemyProjectile : MonoBehaviour
 {
     private Rigidbody2D rb;
     public GameObject collisionSparks;
+    public float bulletSpeed;
     
     
     // Start is called before the first frame update
@@ -17,7 +18,7 @@ public class EnemyProjectile : MonoBehaviour
 
     private void Update()
     {
-        transform.SetPositionAndRotation(transform.position + transform.up * (2 * Time.deltaTime), transform.rotation);
+        transform.SetPositionAndRotation(transform.position + transform.up * (bulletSpeed * Time.deltaTime), transform.rotation);
     }
 
     public void OnTriggerExit2D(Collider2D other)
