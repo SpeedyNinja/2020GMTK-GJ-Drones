@@ -25,7 +25,7 @@ public class ShipController : MonoBehaviour
     public float cooldown;
     
     float[] samples = new float[1024];
-    List<float> movingAverageSamples = CreateList<float>(128);
+    List<float> movingAverageSamples = CreateList<float>(64);
 
     public float decayRate = 0.5f;
     [SerializeField] private float movespeed;
@@ -71,25 +71,34 @@ public class ShipController : MonoBehaviour
     
         source.GetSpectrumData(samples, 0, FFTWindow.Hamming);
 
-        for (int i = 0; i < movingAverageSamples.Count; i++)
+        for (int i = 4; i < movingAverageSamples.Count; i++)
         {
             movingAverageSamples[i] = decayRate * samples[i] + (1 - decayRate) * movingAverageSamples[i];
         }
 
         // var output = ZScore.StartAlgo(movingAverageSamples, 5, 10, 0);
 
-        for (int i = 1; i < movingAverageSamples.Count - 1; i++)
+        for (int i = 5; i < movingAverageSamples.Count; i++)
         {
-            Debug.DrawLine(new Vector3(i - 1, Mathf.Log(movingAverageSamples[i - 1]) + 10, 2), new Vector3(i, Mathf.Log(movingAverageSamples[i]) + 10, 2), Color.cyan);
+            Debug.DrawLine(new Vector3((i - 10)/4f, Mathf.Log(movingAverageSamples[i - 1]) + 10, 2), new Vector3((i - 9)/4f, Mathf.Log(movingAverageSamples[i]) + 10, 2), Color.cyan);
         }
         
-        float max = 0;
-        // int maxIdx = 0;
-        var maxIdx = movingAverageSamples.Select((v, i) => new {v, i})
+        var minMaxIdx = movingAverageSamples.Select((v, i) => new {v, i})
             .OrderByDescending(c => c.v)
             .Take(3)
             .Min(c => c.i);
+        var totalVolume = 0f;
+        var totalWeighted = 0f;
+        if (minMaxIdx > 0) minMaxIdx -= 1;
+        var max3 = movingAverageSamples.GetRange(minMaxIdx, 3)
+            .Select((v, i) => new {v, i});
+        foreach (var sample in max3)
+        {
+            totalVolume += sample.v;
+            totalWeighted += (sample.i + minMaxIdx) * sample.v;
+        }
 
+        var maxIdx = totalWeighted / totalVolume;
         var lvlMax = movingAverageSamples.Average() * 1000;
         
         if (lvlMax > 0.075)
