@@ -9,6 +9,7 @@ using Random = UnityEngine.Random;
 public class DroneControl : MonoBehaviour
 {
     public float deathDelay;
+    public GameObject deathParticles;
     
     private Transform _transform;
     private SpriteRenderer _spriteRenderer;
@@ -81,8 +82,9 @@ public class DroneControl : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_health <= 0)
+        if (!_dying && _health <= 0)
         {
+            Instantiate(deathParticles, transform.position, Quaternion.identity);
             gameObject.GetComponent<PolygonCollider2D>().enabled = false;
             _dying = true;
         }
@@ -90,7 +92,7 @@ public class DroneControl : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        _health -= 1;
+        if (_health > 0) _health -= 1;
     }
 
     private void OnTriggerExit2D(Collider2D other)
