@@ -185,6 +185,6 @@ public class AudioStuff : MonoBehaviour
 
     public void ContinueClick()
     {
-        SceneManager.LoadScene("Scenes/MainScene");
+        SceneManager.LoadScene("Scenes/Instructions");
     }
 }
