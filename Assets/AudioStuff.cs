@@ -33,12 +33,15 @@ public class AudioStuff : MonoBehaviour
     public Button lowBtn;
     public Button highBtn;
     public Button continueBtn;
+
+    private LineRenderer _lineRenderer;
     
     private bool _ispitchTmNotNull;
     private bool _isvolumeTmNotNull;
 
     private float lvlMax;
     private float maxIdx;
+    private bool _isLineRendererNotNull;
 
     private static List<T> CreateList<T>(int capacity)
     {
@@ -52,6 +55,12 @@ public class AudioStuff : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _lineRenderer = GetComponent<LineRenderer>();
+        _isLineRendererNotNull = _lineRenderer != null;
+        if (_isLineRendererNotNull)
+        {
+            _lineRenderer.positionCount = 64;
+        }
         _isvolumeTmNotNull = volumeTm != null;
         _ispitchTmNotNull = pitchTm != null;
         _isscNotNull = sc != null;
@@ -79,7 +88,15 @@ public class AudioStuff : MonoBehaviour
 
         for (int i = 1; i < movingAverageSamples.Count; i++)
         {
-            Debug.DrawLine(new Vector3((i - 10)/4f, Mathf.Log(movingAverageSamples[i - 1]) + 10, 2), new Vector3((i - 9)/4f, Mathf.Log(movingAverageSamples[i]) + 10, 2), Color.cyan);
+            // Debug.DrawLine(new Vector3((i - 10)/4f, Mathf.Log(movingAverageSamples[i - 1]) + 10, 2), new Vector3((i - 9)/4f, Mathf.Log(movingAverageSamples[i]) + 10, 2), Color.cyan);
+        }
+
+        for (int i = 0; i < movingAverageSamples.Count; i++)
+        {
+            if (_isLineRendererNotNull)
+            {
+                _lineRenderer.SetPosition(i, new Vector3((i)/4f - 7f, Mathf.Log(movingAverageSamples[i]) + 10, 2));
+            }
         }
         
         var minMaxIdx = movingAverageSamples.Select((v, i) => new {v, i})
