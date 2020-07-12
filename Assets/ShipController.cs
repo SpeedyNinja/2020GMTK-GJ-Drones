@@ -40,6 +40,12 @@ public class ShipController : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private static readonly int GlitchAmount = Shader.PropertyToID("_GlitchAmount");
 
+    public float lowestPitchPoint = 4;
+    public float highestPitchPoint = 24;
+
+    public float highestVolumePoint = 12;
+    public float lowestVolumePoint = 4;
+    
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -115,8 +121,10 @@ public class ShipController : MonoBehaviour
         float lvlMax;
         
         var maxIdx = totalWeighted / totalVolume;
-        lvlMax = max + 10;
+        Debug.Log(max + 10);
 
+        lvlMax = (max + 10).Remap(lowestVolumePoint, 2, highestVolumePoint, 8);
+        Debug.Log(lvlMax);
         if (mostDiff < mostDiffCutoff)
         {
             if (lowVolCutoff < lvlMax && !glitching)
@@ -132,14 +140,21 @@ public class ShipController : MonoBehaviour
             _spriteRenderer.material.SetFloat(GlitchAmount, 0f);
         }
 
-        shotCooldown = Math.Min(1 / (lvlMax * lvlMax) * shotCooldownMultiplier, 4);
-
+        if (lvlMax > lowVolCutoff)
+        {
+            shotCooldown = Math.Min(1 / (lvlMax * 3 / 4.0f - 1), 2);
+        }
+        else
+        {
+            shotCooldown = 2;
+        }
+        
         if (lvlMax > lowVolCutoff)
         {
             normalizedPositions = (maxIdx - 4) * 0.05f;
             slider.maxValue = shotCooldown;
             var rect = _rectTransformCooldownSlider.rect;
-            _rectTransformCooldownSlider.sizeDelta = new Vector2(shotCooldown * 125, _rectTransformCooldownSlider.sizeDelta.y);
+            _rectTransformCooldownSlider.sizeDelta = new Vector2(shotCooldown * 250, _rectTransformCooldownSlider.sizeDelta.y);
             // Debug.Log(maxIdx + " " + lvlMax);
         }
         
@@ -149,10 +164,20 @@ public class ShipController : MonoBehaviour
             transform.position += Vector3.left * (Math.Sign(diff) * Math.Min(movespeed * Time.deltaTime, Math.Abs(diff)));
         }
     }
+    public static Vector3 CalcParabolaVertex(int x1, int y1, int x2, int y2, int x3, int y3)
+    {
+        
+        double denom = (x1 - x2) * (x1 - x3) * (x2 - x3);
+        double A     = (x3 * (y2 - y1) + x2 * (y1 - y3) + x1 * (y3 - y2)) / denom;
+        double B     = (x3*x3 * (y1 - y2) + x2*x2 * (y3 - y1) + x1*x1 * (y2 - y3)) / denom;
+        double C     = (x2 * x3 * (x2 - x3) * y1 + x3 * x1 * (x3 - x1) * y2 + x1 * x2 * (x1 - x2) * y3) / denom;
+
+        return new Vector3((float)A, (float)B, (float)C);
+    }
 
     private void FixedUpdate()
     {
-        if (shotCooldown != 4)
+        if (shotCooldown != 2)
         {
             if (!canShoot)
             {
@@ -178,3 +203,15 @@ public class ShipController : MonoBehaviour
         }
     }
 }
+
+public static class ExtensionMethods {
+     
+    public static float Remap (this float value, float from1, float to1, float from2, float to2) {
+        
+        float normal = ( value - from1 ) / ( from2 - from1 );
+        float bValue = Mathf.LerpUnclamped(to1, to2, normal);
+        return bValue;
+    }
+       
+}
+
