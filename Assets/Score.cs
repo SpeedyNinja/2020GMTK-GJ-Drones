@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class Score : MonoBehaviour
 {
+
+    public static Score MainScore;
     public float textSizeMultiplier;
     public float textPopTime;
     
@@ -19,6 +21,7 @@ public class Score : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        MainScore = this;
         textMesh = gameObject.GetComponent<TextMeshPro>();
         _baseTextSize = textMesh.fontSize;
         _score = 0;

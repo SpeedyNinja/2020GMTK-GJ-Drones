@@ -96,12 +96,13 @@ public class DroneControl : MonoBehaviour
         if (_health > 0)
         {
             _health -= 1;
-            scoreBoard.SendMessage("Scored");
+            Score.MainScore.Scored();;
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
+        Score.MainScore.Missed();
         scoreBoard.SendMessage("Missed");
         Object.Destroy(gameObject);
     }
