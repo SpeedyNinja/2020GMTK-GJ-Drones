@@ -142,7 +142,6 @@ public class AudioStuff : MonoBehaviour
                 sc.slider.maxValue = sc.shotCooldown;
                 var rect = sc._rectTransformCooldownSlider.rect;
                 sc._rectTransformCooldownSlider.sizeDelta = new Vector2(sc.shotCooldown * 250, sc._rectTransformCooldownSlider.sizeDelta.y);
-                // Debug.Log(maxIdx + " " + lvlMax);
             }
         }
     }

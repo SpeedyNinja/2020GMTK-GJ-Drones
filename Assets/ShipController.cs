@@ -37,8 +37,8 @@ public class ShipController : MonoBehaviour
     public static float lowestPitchPoint = 4;
     public static float highestPitchPoint = 24;
 
-    public static float highestVolumePoint = 12;
-    public static float lowestVolumePoint = 4;
+    public static float highestVolumePoint = 8;
+    public static float lowestVolumePoint = 2;
     
     private void Awake()
     {

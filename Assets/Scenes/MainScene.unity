@@ -300,6 +300,7 @@ GameObject:
   - component: {fileID: 683328397}
   - component: {fileID: 683328398}
   - component: {fileID: 683328399}
+  - component: {fileID: 683328400}
   m_Layer: 0
   m_Name: Ship
   m_TagString: Untagged
@@ -342,15 +343,13 @@ MonoBehaviour:
   shotCooldownMultiplier: 16
   slider: {fileID: 1799785907}
   cooldown: 0
+  glitching: 0
   mostDiffCutoff: 5
-  lowVolCutoff: 1.25
+  lowVolCutoff: 2
   fireSparks: {fileID: 1127648037}
-  decayRate: 0.5
   movespeed: 15
-  lowestPitchPoint: 4
-  highestPitchPoint: 24
-  highestVolumePoint: 8
-  lowestVolumePoint: 6
+  _rectTransformCooldownSlider: {fileID: 0}
+  _spriteRenderer: {fileID: 0}
 --- !u!82 &683328398
 AudioSource:
   m_ObjectHideFlags: 0
@@ -497,6 +496,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &683328400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 683328395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2d3981dd5e83d224b3255e21f3686d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sc: {fileID: 683328397}
+  decayRate: 0.5
+  volumeTm: {fileID: 0}
+  volumeTmQuiet: {fileID: 0}
+  volumeTmLoud: {fileID: 0}
+  pitchTm: {fileID: 0}
+  pitchTmLow: {fileID: 0}
+  pitchTmHigh: {fileID: 0}
 --- !u!1 &824038672
 GameObject:
   m_ObjectHideFlags: 0
