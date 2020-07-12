@@ -7,6 +7,7 @@ using Random = UnityEngine.Random;
 public class DroneController : MonoBehaviour
 {
     public GameObject drone;
+    public int difficulty;
     
     private Transform _controller;
     private float _droneSpawnRate;
@@ -25,8 +26,8 @@ public class DroneController : MonoBehaviour
             _halfScreen = cameraMain.aspect * orthographicSize * 0.7f;
         }
         gameObject.transform.position = new Vector3(0, orthographicSize);
-        _droneSpawnRate = 4;
-        _droneSpawnCountDown = _droneSpawnRate;
+        _droneSpawnRate = 10f / difficulty;
+        _droneSpawnCountDown = 0;
         _controller = gameObject.GetComponent<Transform>();
     }
 
