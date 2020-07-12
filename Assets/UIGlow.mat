@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SpriteGlow
+  m_Name: UIGlow
   m_Shader: {fileID: -6465566751694194690, guid: c2d91c9378e13afd8a8872acd3815fe9,
     type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
@@ -91,10 +91,11 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _EnableExternalAlpha: 0
+    - _GlitchAmount: 0.3
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _GlowVal: 1.8
+    - _GlowVal: 1.2
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1

@@ -1,27 +1,60 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class AudioStuff : MonoBehaviour
 {
     public ShipController sc;
 
+    float[] samples = new float[1024];
+    List<float> movingAverageSamples = CreateList<float>(64);
+    
+    AudioClip microphoneInput;
+    private AudioSource source;
+    
     private bool _isscNotNull;
-    [SerializeField] private float lowVolCutoff;
+    private static readonly int GlitchAmount = Shader.PropertyToID("_GlitchAmount");
+    public float decayRate = 0.5f;
 
+    public TextMeshProUGUI volumeTm;
+    public TextMeshProUGUI pitchTm;
+    private bool _ispitchTmNotNull;
+    private bool _isvolumeTmNotNull;
+
+    private float lvlMax;
+    private float maxIdx;
+
+    private static List<T> CreateList<T>(int capacity)
+    {
+        List<T> coll = new List<T>(capacity);
+        for(int i = 0; i < capacity; i++)
+            coll.Add(default(T));
+        
+        return coll;
+    }
+    
     // Start is called before the first frame update
     void Start()
     {
+        _isvolumeTmNotNull = volumeTm != null;
+        _ispitchTmNotNull = pitchTm != null;
         _isscNotNull = sc != null;
+        if (Microphone.devices.Length>0){
+            microphoneInput = Microphone.Start(Microphone.devices[0],true,2,44100);
+            source = GetComponent<AudioSource>();
+            source.clip = microphoneInput;
+            source.loop = true;
+            while (!(Microphone.GetPosition(null) > 0)) { }
+            source.Play();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        int dec = 128;
-        float[] waveData = new float[dec];
-        glitching = false;
         source.GetSpectrumData(samples, 0, FFTWindow.Hamming);
 
         for (int i = 4; i < movingAverageSamples.Count + 4; i++)
@@ -55,48 +88,63 @@ public class AudioStuff : MonoBehaviour
         var mostDiff = max - Mathf.Log(movingAverageSamples.Min());
         
  
-        float lvlMax;
-        
-        var maxIdx = (totalWeighted / totalVolume).Remap(lowestPitchPoint, 0, highestPitchPoint, 1);
-        Debug.Log(max + 10);
-        if (volumeLabel != null)
+        lvlMax = max + 10;
+
+        maxIdx = totalWeighted / totalVolume;
+
+        if (_isvolumeTmNotNull)
         {
-            volumeLabel.text = "" + (max + 10);
+            volumeTm.text = lvlMax.ToString("0.00");
         }
-        lvlMax = (max + 10).Remap(lowestVolumePoint, 2, highestVolumePoint, 8);
-        Debug.Log(lvlMax);
-        if (mostDiff < mostDiffCutoff)
+
+        if (_ispitchTmNotNull)
         {
-            if (lowVolCutoff < lvlMax && !glitching)
+            pitchTm.text = maxIdx.ToString("0.00");
+        }
+        
+        if (_isscNotNull)
+        {
+            sc.glitching = false;
+            maxIdx = maxIdx.Remap(ShipController.lowestPitchPoint, 0, ShipController.highestPitchPoint, 1);
+            lvlMax = lvlMax.Remap(ShipController.lowestVolumePoint, 2, ShipController.highestVolumePoint, 8);
+            
+            if (mostDiff < sc.mostDiffCutoff)
             {
-                _spriteRenderer.material.SetFloat(GlitchAmount, lvlMax * 2 * 0.01f);
-                glitching = true;
+                if (sc.lowVolCutoff < lvlMax && !sc.glitching)
+                {
+                    sc._spriteRenderer.material.SetFloat(GlitchAmount, lvlMax * 2 * 0.01f);
+                    sc.glitching = true;
+                }
+                lvlMax = 0.001f;
             }
-            lvlMax = 0.001f;
-        }
 
-        if (!glitching)
-        {
-            _spriteRenderer.material.SetFloat(GlitchAmount, 0f);
-        }
+            if (!sc.glitching)
+            {
+                sc._spriteRenderer.material.SetFloat(GlitchAmount, 0f);
+            }
 
-        if (lvlMax > lowVolCutoff)
-        {
-            shotCooldown = Math.Min(1 / (lvlMax * 1 / 1.5f - 2/1.5f), 2);
-        }
-        else
-        {
-            shotCooldow
-                n = 2;
-        }
+            if (lvlMax > sc.lowVolCutoff)
+            {
+                sc.shotCooldown = Math.Min(1 / (lvlMax * 1 / 1.5f - 2/1.5f), 2);
+            }
+            else
+            {
+                sc.shotCooldown = 2;
+            }
         
-        if (lvlMax > lowVolCutoff)
-        {
-            if (_isscNotNull)
+            if (lvlMax > sc.lowVolCutoff)
             {
                 sc.normalizedPositions = maxIdx;
+                sc.slider.maxValue = sc.shotCooldown;
+                var rect = sc._rectTransformCooldownSlider.rect;
+                sc._rectTransformCooldownSlider.sizeDelta = new Vector2(sc.shotCooldown * 250, sc._rectTransformCooldownSlider.sizeDelta.y);
+                // Debug.Log(maxIdx + " " + lvlMax);
             }
-            // Debug.Log(maxIdx + " " + lvlMax);
         }
+    }
+
+    public void QuiteSet()
+    {
+        ShipController.lowestVolumePoint = lvlMax;
     }
 }
