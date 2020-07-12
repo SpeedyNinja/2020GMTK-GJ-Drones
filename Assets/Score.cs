@@ -26,7 +26,7 @@ public class Score : MonoBehaviour
         _baseTextSize = textMesh.fontSize;
         _score = 0;
         _addToScore = 0;
-        _textPopCountup = 0;
+        _textPopCountup = 1000;
     }
 
     // Update is called once per frame
@@ -39,13 +39,13 @@ public class Score : MonoBehaviour
         }
         else
         {
-            _textPopCountup = 0;
             textMesh.fontSize = _baseTextSize;
             if (_addToScore > 0)
             {
                 _score += _addToScore;
                 _addToScore = 0;
                 textMesh.SetText("" + _score);
+                _textPopCountup = 0;
             }
         }
     }

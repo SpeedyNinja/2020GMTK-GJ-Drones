@@ -87,20 +87,18 @@ public class DroneControl : MonoBehaviour
             Instantiate(deathParticles, transform.position, Quaternion.identity);
             gameObject.GetComponent<PolygonCollider2D>().enabled = false;
             _dying = true;
+            Score.MainScore.Scored();
         }
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (_health > 0)
-        {
-            _health -= 1;
-            Score.MainScore.Scored();;
-        }
+        if (_health > 0) _health -= 1;
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
+        
         Score.MainScore.Missed();
         Object.Destroy(gameObject);
     }
