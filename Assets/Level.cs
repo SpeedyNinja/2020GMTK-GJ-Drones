@@ -3,29 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class Score : MonoBehaviour
+public class Level : MonoBehaviour
 {
 
-    public static Score MainScore;
+    public static Level MainLevel;
     public float textSizeMultiplier;
     public float textPopTime;
     
     private TextMeshProUGUI textMesh;
     private float _baseTextSize;
     private int _letPast;
-    public int _score;
-    private int _addToScore;
+    public int _level;
+    private int _setLevel;
     private float _textPopCountup;
     
     // Start is called before the first frame update
     void Start()
     {
-        MainScore = this;
+        MainLevel = this;
         textMesh = gameObject.GetComponent<TextMeshProUGUI>();
         _baseTextSize = textMesh.fontSize;
-        _score = 0;
-        _addToScore = 0;
+        _level = 0;
+        _setLevel = 0;
         _textPopCountup = 1000;
     }
 
@@ -40,22 +41,18 @@ public class Score : MonoBehaviour
         else
         {
             textMesh.fontSize = _baseTextSize;
-            if (_addToScore > 0)
+            if (_setLevel != _level)
             {
-                _score += _addToScore;
-                _addToScore = 0;
-                textMesh.SetText("" + _score);
+                _level = _setLevel;
+                _setLevel = 0;
+                textMesh.SetText("" + _level);
                 _textPopCountup = 0;
             }
         }
     }
 
-    public void Scored()
+    public void SetLevel(int newLevel)
     {
-        _addToScore += 1;
-        if ((_score + _addToScore) % 10 == 0)
-        {
-            Level.MainLevel.SetLevel((_score + _addToScore) / 10);
-        }
+        _setLevel = newLevel + 1;
     }
 }
