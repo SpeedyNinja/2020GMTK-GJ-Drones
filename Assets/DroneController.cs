@@ -53,10 +53,11 @@ public class DroneController : MonoBehaviour
             var newSpeed = newScale;
             var newZigOffset = Convert.ToSingle(Random.value * Math.PI * 2);
             var newZigAmount = Convert.ToSingle(Random.value * 0.6);
+            var newCanFire = newHealth > 2;
             
             var droneInstance = Instantiate(drone, new Vector3(newXPos, newYPos, _controller.position.z), Quaternion.identity);
             var droneScript = droneInstance.GetComponent<DroneControl>();
-            droneScript.SetVars(newHealth, newScale, newColour, newSpeed, newZigOffset, newZigAmount);
+            droneScript.SetVars(newHealth, newCanFire, newScale, newColour, newSpeed, newZigOffset, newZigAmount);
             _droneSpawnCountDown = _droneSpawnRate;
         };
     }

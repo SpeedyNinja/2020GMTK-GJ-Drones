@@ -46,8 +46,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deathDelay: 5
+  projectile: {fileID: 7489681007407106134, guid: 87548f99dfba4b880b7d276e5e3c918c,
+    type: 3}
   deathParticles: {fileID: 1979738328575124, guid: 5dbd445c818792e40a35143258c8e0f6,
     type: 3}
+  reloadDelay: 4
 --- !u!212 &-6847345740974737233
 SpriteRenderer:
   m_ObjectHideFlags: 0

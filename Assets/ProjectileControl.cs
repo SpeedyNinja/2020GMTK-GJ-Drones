@@ -19,11 +19,13 @@ public class ProjectileControl : MonoBehaviour
 
     public void OnTriggerExit2D(Collider2D other)
     {
+        if (other.gameObject.name == "Ship") return;
         Destroy(gameObject);
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
+        if (other.gameObject.name == "Ship") return;
         Instantiate(collisionSparks, transform.position, Quaternion.LookRotation(other.GetContact(0).normal));
         Destroy(gameObject);
     }

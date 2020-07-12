@@ -10,7 +10,9 @@ using Random = UnityEngine.Random;
 public class DroneControl : MonoBehaviour
 {
     public float deathDelay;
+    public GameObject projectile;
     public GameObject deathParticles;
+    public float reloadDelay;
     
     private Transform _transform;
     private SpriteRenderer _spriteRenderer;
@@ -18,6 +20,8 @@ public class DroneControl : MonoBehaviour
     private Color _colour;
     private float _scale;
 
+    private bool _canFire;
+    private float _bulletReloadTimer;
     private bool _dying;
     private float _deathCountdown;
     private float _health;
@@ -43,8 +47,9 @@ public class DroneControl : MonoBehaviour
         _lowerLimit = - Camera.main.orthographicSize - 1;
     }
 
-    public void SetVars(float newHealth, float scale, Color newColour, float newSpeed, float zagOffset, float zagAmount)
+    public void SetVars(float newHealth, bool canFire, float scale, Color newColour, float newSpeed, float zagOffset, float zagAmount)
     {
+        _canFire = canFire;
         _health = newHealth;
         _speed = newSpeed;
         _scale = scale;
@@ -55,8 +60,21 @@ public class DroneControl : MonoBehaviour
 
     private void Update()
     {
+        
         if (!_dying)
         {
+            if (_canFire)
+            {
+                if (_bulletReloadTimer < reloadDelay)
+                {
+                    _bulletReloadTimer += Time.deltaTime;
+                }
+                else
+                {
+                    Instantiate(projectile, _transform.position + _transform.up, _transform.rotation);
+                    _bulletReloadTimer = 0;
+                }
+            }
             var newY = _transform.position.y - _speed * Time.deltaTime;
             var xDelta = Convert.ToSingle(_zigAmount * Math.Sin(newY + _zigOffset));
             var newX = xDelta + _startPos.x;
