@@ -44,7 +44,6 @@ public class Level : MonoBehaviour
             if (_setLevel != _level)
             {
                 _level = _setLevel;
-                _setLevel = 0;
                 textMesh.SetText("" + _level);
                 _textPopCountup = 0;
             }

@@ -52,7 +52,7 @@ MonoBehaviour:
     type: 3}
   winParticles: {fileID: 1747028726869127089, guid: a25fb01107b208278b572266b8ca8b01,
     type: 3}
-  reloadDelay: 6
+  reloadDelay: 2
 --- !u!212 &-6847345740974737233
 SpriteRenderer:
   m_ObjectHideFlags: 0

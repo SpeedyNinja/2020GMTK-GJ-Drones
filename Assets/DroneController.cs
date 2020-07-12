@@ -49,13 +49,13 @@ public class DroneController : MonoBehaviour
             
             var newXPos = Random.Range(-_halfScreen, _halfScreen);
             var newYPos = _controller.position.y;
-            var newHealth = Math.Min(Random.value * difficulty + 1, 6);
+            var newHealth = Math.Min(Random.value * difficulty / 2 + 1, 6);
             var newColour = Color.HSVToRGB(Random.value, 1, 1, true);
             var newScale = Convert.ToSingle((newHealth - 1) / 6 / 2 + 1);
             var newSpeed = newScale;
             var newZigOffset = Convert.ToSingle(Random.value * Math.PI * 2);
             var newZigAmount = Convert.ToSingle(Random.value * 0.6);
-            var newCanFire = newHealth > 2;
+            var newCanFire = newHealth > 2 && (Random.value > (difficulty / 10f));
             
             var droneInstance = Instantiate(drone, new Vector3(newXPos, newYPos, _controller.position.z), Quaternion.identity);
             var droneScript = droneInstance.GetComponent<DroneControl>();

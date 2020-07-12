@@ -74,6 +74,7 @@ public class DroneControl : MonoBehaviour
                 {
                     Instantiate(projectile, _transform.position + _transform.up, _transform.rotation);
                     _bulletReloadTimer = 0;
+                    _canFire = false;
                 }
             }
             var newY = _transform.position.y - _speed * Time.deltaTime;
