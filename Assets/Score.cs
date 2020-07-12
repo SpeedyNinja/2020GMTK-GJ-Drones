@@ -10,6 +10,7 @@ public class Score : MonoBehaviour
     public static Score MainScore;
     public float textSizeMultiplier;
     public float textPopTime;
+    public int startScore;
     
     private TextMeshProUGUI textMesh;
     private float _baseTextSize;
@@ -24,7 +25,7 @@ public class Score : MonoBehaviour
         MainScore = this;
         textMesh = gameObject.GetComponent<TextMeshProUGUI>();
         _baseTextSize = textMesh.fontSize;
-        _score = 0;
+        _score = startScore;
         _addToScore = 0;
         _textPopCountup = 1000;
     }
