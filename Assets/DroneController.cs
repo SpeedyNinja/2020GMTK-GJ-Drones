@@ -42,7 +42,8 @@ public class DroneController : MonoBehaviour
         }
         else
         {
-            Instantiate(drone, new Vector3(Random.Range(-_halfScreen, _halfScreen), _controller.position.y), Quaternion.identity);
+            Instantiate(drone, new Vector3(Random.Range(-_halfScreen, _halfScreen), _controller.position.y), 
+                Quaternion.Euler(0,0,180));
             _droneSpawnCountDown = _droneSpawnRate;
         }
     }
