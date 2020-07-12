@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Score : MonoBehaviour
+public class Lives : MonoBehaviour
 {
 
-    public static Score MainScore;
+    public static Lives MainLives;
     public float textSizeMultiplier;
     public float textPopTime;
     
@@ -21,7 +21,7 @@ public class Score : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MainScore = this;
+        MainLives = this;
         textMesh = gameObject.GetComponent<TextMeshProUGUI>();
         _baseTextSize = textMesh.fontSize;
         _score = 0;
@@ -40,7 +40,7 @@ public class Score : MonoBehaviour
         else
         {
             textMesh.fontSize = _baseTextSize;
-            if (_addToScore > 0)
+            if (_addToScore < 0)
             {
                 _score += _addToScore;
                 _addToScore = 0;
@@ -50,8 +50,8 @@ public class Score : MonoBehaviour
         }
     }
 
-    public void Scored()
+    public void LooseLife()
     {
-        _addToScore += 1;
+        _addToScore -= 1;
     }
 }

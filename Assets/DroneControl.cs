@@ -98,8 +98,7 @@ public class DroneControl : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        
-        Score.MainScore.Missed();
+        Lives.MainLives.LooseLife();
         Object.Destroy(gameObject);
     }
 }
