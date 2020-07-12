@@ -11,7 +11,7 @@ public class Score : MonoBehaviour
     public float textSizeMultiplier;
     public float textPopTime;
     
-    private TextMeshPro textMesh;
+    private TextMeshProUGUI textMesh;
     private float _baseTextSize;
     private int _letPast;
     private int _score;
@@ -22,7 +22,7 @@ public class Score : MonoBehaviour
     void Start()
     {
         MainScore = this;
-        textMesh = gameObject.GetComponent<TextMeshPro>();
+        textMesh = gameObject.GetComponent<TextMeshProUGUI>();
         _baseTextSize = textMesh.fontSize;
         _score = 0;
         _addToScore = 0;
@@ -35,15 +35,17 @@ public class Score : MonoBehaviour
         if (_textPopCountup < textPopTime)
         {
             _textPopCountup += Time.deltaTime;
-            textMesh.fontSize = _baseTextSize * (float)(-Math.Pow(2 * _textPopCountup - 0.5, 2) + textSizeMultiplier);
+            textMesh.fontSize = _baseTextSize * (float)Math.Max(-Math.Pow(2 * _textPopCountup - 0.5, 2) + textSizeMultiplier, 1);
         }
         else
         {
+            _textPopCountup = 0;
+            textMesh.fontSize = _baseTextSize;
             if (_addToScore > 0)
             {
                 _score += _addToScore;
+                _addToScore = 0;
                 textMesh.SetText("" + _score);
-                _textPopCountup = 0;
             }
         }
     }

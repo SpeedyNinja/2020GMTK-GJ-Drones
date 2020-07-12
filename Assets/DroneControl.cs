@@ -13,7 +13,6 @@ public class DroneControl : MonoBehaviour
     
     private Transform _transform;
     private SpriteRenderer _spriteRenderer;
-    private GameObject scoreBoard;
 
     private Color _colour;
     private float _scale;
@@ -103,7 +102,6 @@ public class DroneControl : MonoBehaviour
     private void OnTriggerExit2D(Collider2D other)
     {
         Score.MainScore.Missed();
-        scoreBoard.SendMessage("Missed");
         Object.Destroy(gameObject);
     }
 }
