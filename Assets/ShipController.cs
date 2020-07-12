@@ -24,7 +24,10 @@ public class ShipController : MonoBehaviour
     private bool canShoot;
     public float cooldown;
 
+    private bool glitching = false;
+
     public float mostDiffCutoff = 5;
+    public float lowVolCutoff = 1.25f;
 
     public ParticleSystem fireSparks;
     
@@ -34,9 +37,12 @@ public class ShipController : MonoBehaviour
     public float decayRate = 0.5f;
     [SerializeField] private float movespeed;
     private RectTransform _rectTransformCooldownSlider;
+    private SpriteRenderer _spriteRenderer;
+    private static readonly int GlitchAmount = Shader.PropertyToID("_GlitchAmount");
 
     private void Awake()
     {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         _rectTransformCooldownSlider = slider.GetComponentInParent<RectTransform>();
     }
 
@@ -72,7 +78,7 @@ public class ShipController : MonoBehaviour
     {
         int dec = 128;
         float[] waveData = new float[dec];
-    
+        glitching = false;
         source.GetSpectrumData(samples, 0, FFTWindow.Hamming);
 
         for (int i = 4; i < movingAverageSamples.Count + 4; i++)
@@ -109,19 +115,26 @@ public class ShipController : MonoBehaviour
         float lvlMax;
         
         var maxIdx = totalWeighted / totalVolume;
+        lvlMax = max + 10;
 
-        if (mostDiff > mostDiffCutoff)
+        if (mostDiff < mostDiffCutoff)
         {
-            lvlMax = max + 10;
-        }
-        else
-        {
+            if (lowVolCutoff < lvlMax && !glitching)
+            {
+                _spriteRenderer.material.SetFloat(GlitchAmount, lvlMax * 2 * 0.01f);
+                glitching = true;
+            }
             lvlMax = 0.001f;
+        }
+
+        if (!glitching)
+        {
+            _spriteRenderer.material.SetFloat(GlitchAmount, 0f);
         }
 
         shotCooldown = Math.Min(1 / (lvlMax * lvlMax) * shotCooldownMultiplier, 4);
 
-        if (lvlMax > 1.25)
+        if (lvlMax > lowVolCutoff)
         {
             normalizedPositions = (maxIdx - 4) * 0.05f;
             slider.maxValue = shotCooldown;
