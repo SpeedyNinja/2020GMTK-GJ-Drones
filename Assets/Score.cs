@@ -14,7 +14,7 @@ public class Score : MonoBehaviour
     private TextMeshProUGUI textMesh;
     private float _baseTextSize;
     private int _letPast;
-    private int _score;
+    public int _score;
     private int _addToScore;
     private float _textPopCountup;
     

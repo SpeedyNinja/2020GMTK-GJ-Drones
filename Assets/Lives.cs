@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Lives : MonoBehaviour
 {
@@ -46,6 +47,10 @@ public class Lives : MonoBehaviour
             {
                 _score += _addToScore;
                 _addToScore = 0;
+                if (_score <= 0)
+                {
+                    SceneManager.LoadScene("Scenes/GameOver");
+                }
                 textMesh.SetText("" + _score);
                 _textPopCountup = 0;
             }
