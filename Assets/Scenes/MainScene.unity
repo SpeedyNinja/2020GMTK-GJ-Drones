@@ -337,12 +337,13 @@ MonoBehaviour:
     type: 3}
   shotCooldown: 1
   normalizedPositions: 0
-  shotCooldownMultiplier: 0.5
+  shotCooldownMultiplier: 16
   slider: {fileID: 1799785907}
   cooldown: 0
+  mostDiffCutoff: 5
   fireSparks: {fileID: 1127648037}
   decayRate: 0.5
-  movespeed: 5
+  movespeed: 15
 --- !u!82 &683328398
 AudioSource:
   m_ObjectHideFlags: 0
