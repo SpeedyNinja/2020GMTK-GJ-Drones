@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using Button = UnityEngine.UI.Button;
 
 public class AudioStuff : MonoBehaviour
 {
@@ -25,6 +27,13 @@ public class AudioStuff : MonoBehaviour
     public TextMeshProUGUI pitchTm;
     public TextMeshProUGUI pitchTmLow;
     public TextMeshProUGUI pitchTmHigh;
+
+    // public Button quietBtn;
+    public Button loudBtn;
+    public Button lowBtn;
+    public Button highBtn;
+    public Button continueBtn;
+    
     private bool _ispitchTmNotNull;
     private bool _isvolumeTmNotNull;
 
@@ -150,23 +159,32 @@ public class AudioStuff : MonoBehaviour
     {
         ShipController.lowestVolumePoint = lvlMax;
         volumeTmQuiet.text = ShipController.lowestVolumePoint.ToString("0.00");
+        loudBtn.interactable = true;
     }
     
     public void LoudSet()
     {
         ShipController.highestVolumePoint = lvlMax;
         volumeTmLoud.text = ShipController.highestVolumePoint.ToString("0.00");
+        lowBtn.interactable = true;
     }
     
     public void LowestSet()
     {
         ShipController.lowestPitchPoint = maxIdx;
         pitchTmLow.text = ShipController.lowestPitchPoint.ToString("0.00");
+        highBtn.interactable = true;
     }
     
     public void HighestSet()
     {
         ShipController.highestPitchPoint = maxIdx;
         pitchTmHigh.text = ShipController.highestPitchPoint.ToString("0.00");
+        continueBtn.interactable = true;
+    }
+
+    public void ContinueClick()
+    {
+        SceneManager.LoadScene("Scenes/MainScene");
     }
 }
