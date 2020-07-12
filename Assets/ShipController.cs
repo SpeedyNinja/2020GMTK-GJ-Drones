@@ -27,7 +27,7 @@ public class ShipController : MonoBehaviour
     private bool glitching = false;
 
     public float mostDiffCutoff = 5;
-    public float lowVolCutoff = 1.25f;
+    public float lowVolCutoff = 2f;
 
     public ParticleSystem fireSparks;
     
@@ -120,7 +120,7 @@ public class ShipController : MonoBehaviour
  
         float lvlMax;
         
-        var maxIdx = totalWeighted / totalVolume;
+        var maxIdx = (totalWeighted / totalVolume).Remap(lowestPitchPoint, 0, highestPitchPoint, 1);
         Debug.Log(max + 10);
 
         lvlMax = (max + 10).Remap(lowestVolumePoint, 2, highestVolumePoint, 8);
@@ -142,7 +142,7 @@ public class ShipController : MonoBehaviour
 
         if (lvlMax > lowVolCutoff)
         {
-            shotCooldown = Math.Min(1 / (lvlMax * 3 / 4.0f - 1), 2);
+            shotCooldown = Math.Min(1 / (lvlMax * 1 / 1.5f - 2/1.5f), 2);
         }
         else
         {
@@ -151,7 +151,7 @@ public class ShipController : MonoBehaviour
         
         if (lvlMax > lowVolCutoff)
         {
-            normalizedPositions = (maxIdx - 4) * 0.05f;
+            normalizedPositions = maxIdx;
             slider.maxValue = shotCooldown;
             var rect = _rectTransformCooldownSlider.rect;
             _rectTransformCooldownSlider.sizeDelta = new Vector2(shotCooldown * 250, _rectTransformCooldownSlider.sizeDelta.y);
