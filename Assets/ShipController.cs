@@ -23,6 +23,10 @@ public class ShipController : MonoBehaviour
     private GameObject projectile;
     private bool canShoot;
     public float cooldown;
+
+    public float mostDiffCutoff = 5;
+
+    public ParticleSystem fireSparks;
     
     float[] samples = new float[1024];
     List<float> movingAverageSamples = CreateList<float>(64);
@@ -71,14 +75,14 @@ public class ShipController : MonoBehaviour
     
         source.GetSpectrumData(samples, 0, FFTWindow.Hamming);
 
-        for (int i = 4; i < movingAverageSamples.Count; i++)
+        for (int i = 4; i < movingAverageSamples.Count + 4; i++)
         {
-            movingAverageSamples[i] = decayRate * samples[i] + (1 - decayRate) * movingAverageSamples[i];
+            movingAverageSamples[i - 4] = decayRate * samples[i] + (1 - decayRate) * movingAverageSamples[i - 4];
         }
 
         // var output = ZScore.StartAlgo(movingAverageSamples, 5, 10, 0);
 
-        for (int i = 5; i < movingAverageSamples.Count; i++)
+        for (int i = 1; i < movingAverageSamples.Count; i++)
         {
             Debug.DrawLine(new Vector3((i - 10)/4f, Mathf.Log(movingAverageSamples[i - 1]) + 10, 2), new Vector3((i - 9)/4f, Mathf.Log(movingAverageSamples[i]) + 10, 2), Color.cyan);
         }
@@ -98,17 +102,32 @@ public class ShipController : MonoBehaviour
             totalWeighted += (sample.i + minMaxIdx) * sample.v;
         }
 
-        var maxIdx = totalWeighted / totalVolume;
-        var lvlMax = movingAverageSamples.Average() * 1000;
+        var max = Mathf.Log(movingAverageSamples.Max());
+        var mostDiff = max - Mathf.Log(movingAverageSamples.Min());
         
-        if (lvlMax > 0.075)
+ 
+        float lvlMax;
+        
+        var maxIdx = totalWeighted / totalVolume;
+
+        if (mostDiff > mostDiffCutoff)
+        {
+            lvlMax = max + 10;
+        }
+        else
+        {
+            lvlMax = 0.001f;
+        }
+
+        shotCooldown = Math.Min(1 / (lvlMax * lvlMax) * shotCooldownMultiplier, 4);
+
+        if (lvlMax > 1.25)
         {
             normalizedPositions = (maxIdx - 4) * 0.05f;
-            shotCooldown = Math.Min(1 / lvlMax * shotCooldownMultiplier, 4);
             slider.maxValue = shotCooldown;
             var rect = _rectTransformCooldownSlider.rect;
             _rectTransformCooldownSlider.sizeDelta = new Vector2(shotCooldown * 125, _rectTransformCooldownSlider.sizeDelta.y);
-            Debug.Log(maxIdx + " " + lvlMax);
+            // Debug.Log(maxIdx + " " + lvlMax);
         }
         
         var diff = (transform.position.x + 8) / 16 - Mathf.Clamp(normalizedPositions,0, 1);
@@ -139,6 +158,7 @@ public class ShipController : MonoBehaviour
 
                 shaker.ShakeOnce(0.5f, 10f, 0.1f, 0.1f);
                 projectile = Instantiate(projectilePrefab, controller.position, Quaternion.LookRotation(Vector3.forward));
+                fireSparks.Play();
                 canShoot = false;
                 cooldown = 0;
             }

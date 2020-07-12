@@ -46,6 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 230a0ec98a78a5afdacba0eb91ad1e25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collisionSparks: {fileID: 1747028726869127089, guid: 398cc72bcb2a56660a946f11cc15909f,
+    type: 3}
 --- !u!212 &835360560282357000
 SpriteRenderer:
   m_ObjectHideFlags: 0

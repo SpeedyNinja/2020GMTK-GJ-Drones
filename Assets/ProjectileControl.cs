@@ -7,6 +7,8 @@ using Object = UnityEngine.Object;
 public class ProjectileControl : MonoBehaviour
 {
     private Rigidbody2D rb;
+    public GameObject collisionSparks;
+    
     
     // Start is called before the first frame update
     void Start()
@@ -17,6 +19,12 @@ public class ProjectileControl : MonoBehaviour
 
     public void OnTriggerExit2D(Collider2D other)
     {
-        Object.Destroy(gameObject);
+        Destroy(gameObject);
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        Instantiate(collisionSparks, transform.position, Quaternion.LookRotation(other.GetContact(0).normal));
+        Destroy(gameObject);
     }
 }
