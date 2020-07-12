@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using EZCameraShake;
 using UnityEditor.UI;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -84,7 +85,8 @@ public class DroneControl : MonoBehaviour
     {
         if (!_dying && _health <= 0)
         {
-            Instantiate(deathParticles, transform.position, Quaternion.identity);
+            Instantiate(deathParticles, transform.position, Quaternion.identity, transform);
+            CameraShaker.Instance.ShakeOnce(2, 5, 0.25f, 0.25f);
             gameObject.GetComponent<PolygonCollider2D>().enabled = false;
             _dying = true;
             Score.MainScore.Scored();

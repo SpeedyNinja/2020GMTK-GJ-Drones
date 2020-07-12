@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1747028726869127100}
   - component: {fileID: 1747028726869127103}
   - component: {fileID: 1747028726869127102}
-  - component: {fileID: -2725344283751251068}
   m_Layer: 0
   m_Name: SparksParticles (1)
   m_TagString: Untagged
@@ -671,7 +670,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -4813,15 +4812,3 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!114 &-2725344283751251068
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1747028726869127089}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cec44a17369769698a62d7459f56661c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
