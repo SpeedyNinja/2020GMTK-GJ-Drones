@@ -26,7 +26,7 @@ public class DroneController : MonoBehaviour
             _halfScreen = cameraMain.aspect * orthographicSize * 0.7f;
         }
         gameObject.transform.position = new Vector3(0, orthographicSize, gameObject.transform.position.z);
-        _droneSpawnRate = 10f / difficulty;
+        _droneSpawnRate = 10f / (difficulty + 1);
         _droneSpawnCountDown = 0;
         _controller = gameObject.GetComponent<Transform>();
     }
@@ -45,11 +45,13 @@ public class DroneController : MonoBehaviour
         }
         else
         {
+            difficulty = Score.MainScore._score / 10 + 1;
+            
             var newXPos = Random.Range(-_halfScreen, _halfScreen);
             var newYPos = _controller.position.y;
-            var newHealth = Random.value * 2 + 1;
+            var newHealth = Math.Min(Random.value * difficulty + 1, 6);
             var newColour = Color.HSVToRGB(Random.value, 1, 1, true);
-            var newScale = Convert.ToSingle((newHealth - 1) / 2 / 2 + 1);
+            var newScale = Convert.ToSingle((newHealth - 1) / 6 / 2 + 1);
             var newSpeed = newScale;
             var newZigOffset = Convert.ToSingle(Random.value * Math.PI * 2);
             var newZigAmount = Convert.ToSingle(Random.value * 0.6);
@@ -58,7 +60,7 @@ public class DroneController : MonoBehaviour
             var droneInstance = Instantiate(drone, new Vector3(newXPos, newYPos, _controller.position.z), Quaternion.identity);
             var droneScript = droneInstance.GetComponent<DroneControl>();
             droneScript.SetVars(newHealth, newCanFire, newScale, newColour, newSpeed, newZigOffset, newZigAmount);
-            _droneSpawnCountDown = _droneSpawnRate;
+            _droneSpawnCountDown = 10f / (difficulty + 1);
         };
     }
 }

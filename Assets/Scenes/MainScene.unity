@@ -1038,6 +1038,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textSizeMultiplier: 2
   textPopTime: 1
+  _score: 0
 --- !u!114 &1062329478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6644,4 +6645,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drone: {fileID: 5695118672530339677, guid: ae337316ee70f1b68b40809e74c55bb1, type: 3}
-  difficulty: 3
+  difficulty: 0
