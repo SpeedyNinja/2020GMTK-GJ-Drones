@@ -20,7 +20,11 @@ public class AudioStuff : MonoBehaviour
     public float decayRate = 0.5f;
 
     public TextMeshProUGUI volumeTm;
+    public TextMeshProUGUI volumeTmQuiet;
+    public TextMeshProUGUI volumeTmLoud;
     public TextMeshProUGUI pitchTm;
+    public TextMeshProUGUI pitchTmLow;
+    public TextMeshProUGUI pitchTmHigh;
     private bool _ispitchTmNotNull;
     private bool _isvolumeTmNotNull;
 
@@ -146,5 +150,24 @@ public class AudioStuff : MonoBehaviour
     public void QuiteSet()
     {
         ShipController.lowestVolumePoint = lvlMax;
+        volumeTmQuiet.text = ShipController.lowestVolumePoint.ToString("0.00");
+    }
+    
+    public void LoudSet()
+    {
+        ShipController.highestVolumePoint = lvlMax;
+        volumeTmLoud.text = ShipController.highestVolumePoint.ToString("0.00");
+    }
+    
+    public void LowestSet()
+    {
+        ShipController.lowestPitchPoint = maxIdx;
+        pitchTmLow.text = ShipController.lowestPitchPoint.ToString("0.00");
+    }
+    
+    public void HighestSet()
+    {
+        ShipController.highestPitchPoint = maxIdx;
+        pitchTmHigh.text = ShipController.highestPitchPoint.ToString("0.00");
     }
 }
