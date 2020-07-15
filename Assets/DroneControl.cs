@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using EZCameraShake;
-using UnityEditor.UI;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;

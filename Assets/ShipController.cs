@@ -16,6 +16,8 @@ public class ShipController : MonoBehaviour
     public float shotCooldownMultiplier;
 
     public Slider slider;
+
+    private AudioSource _pewSource;
     
     private Transform controller;
     private GameObject projectile;
@@ -29,7 +31,7 @@ public class ShipController : MonoBehaviour
 
     public ParticleSystem fireSparks;
 
-    [SerializeField] private float movespeed;
+    public float movespeed;
     public RectTransform _rectTransformCooldownSlider;
     public SpriteRenderer _spriteRenderer;
     // private static readonly int GlitchAmount = Shader.PropertyToID("_GlitchAmount");
@@ -39,16 +41,13 @@ public class ShipController : MonoBehaviour
 
     public static float highestVolumePoint = 8;
     public static float lowestVolumePoint = 2;
-    
-    private void Awake()
-    {
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-        _rectTransformCooldownSlider = slider.GetComponentInParent<RectTransform>();
-    }
 
     // Start is called before the first frame update
     void Start()
     {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _rectTransformCooldownSlider = slider.GetComponentInParent<RectTransform>();
+        _pewSource = GetComponents<AudioSource>()[1];
         controller = gameObject.GetComponent<Transform>();
         projectile = null;
         canShoot = false;
@@ -93,7 +92,7 @@ public class ShipController : MonoBehaviour
             }
             else
             {
-
+                _pewSource.Play();
                 shaker.ShakeOnce(0.5f, 10f, 0.1f, 0.1f);
                 projectile = Instantiate(projectilePrefab, controller.position, Quaternion.LookRotation(Vector3.forward));
                 fireSparks.Play();
